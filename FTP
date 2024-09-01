@@ -1,0 +1,17 @@
+#!/bin/bash
+
+#This line removes port 21 from the IP address, remove this line if you are feeding it IP addresses without a port
+cat output.txt | grep :21$ | rev | cut -c 4- | rev > ftp.txt
+
+FTP_USER="anonymous"
+FTP_PASS="password"
+
+file=ftp.txt
+for ip in $(cat ftp.txt);
+	do
+	ftp -inv $ip <<EOF
+	user $FTP_USER $FTP_PASS
+	ls
+	bye
+EOF
+done < "ftp.txt"
